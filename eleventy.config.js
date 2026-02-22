@@ -3,6 +3,7 @@ module.exports = function (conf) {
   conf.addPassthroughCopy("./src/index.js");
   conf.addPassthroughCopy("./src/assets");
   conf.addPassthroughCopy("./src/fonts");
+  conf.addPassthroughCopy("./ui.yaml");
 
   conf.addWatchTarget("./src/index.css");
   conf.addWatchTarget("./src/styles/");

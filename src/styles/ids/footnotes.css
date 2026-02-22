@@ -30,8 +30,8 @@ ids-footnote-link {
 
   /* Not selected state: outlined circle */
   background: transparent;
-  border: 1px solid rgb(var(--ids__text-RGB));
-  color: rgb(var(--ids__text-RGB));
+  border: 1px solid var(--mdlt-text);
+  color: var(--mdlt-text);
 
   &.enlarge {
     font-size: 0.85em;
@@ -39,15 +39,15 @@ ids-footnote-link {
 
   /* Selected state: filled circle */
   &.open {
-    background: rgb(var(--ids__text-RGB));
+    background: var(--mdlt-text);
     border: 1px solid transparent;
-    color: rgb(var(--ids__background-RGB));
+    color: var(--mdlt-background);
   }
 
   /* Hover state for non-selected */
   &:not(.open):hover {
-    border-color: rgb(var(--ids__hover-RGB));
-    color: rgb(var(--ids__hover-RGB));
+    border-color: var(--mdlt-text-hover);
+    color: var(--mdlt-text-hover);
   }
 }
 
@@ -70,11 +70,11 @@ ids-footnote-link {
 aside.ids-footnote {
   position: absolute;
   width: 20em;
-  padding: calc(var(--ids__density) * 0.75em);
+  padding: 0.975em;
   font-size: 0.8em;
   z-index: 150;
-  box-shadow: 0 0.5em 1em rgba(var(--ids__text-RGB), 0.3);
-  background: rgb(var(--ids__background-RGB));
+  box-shadow: 0 0.5em 1em color-mix(in srgb, var(--mdlt-text) 30%, transparent);
+  background: var(--mdlt-background);
   border-radius: 0.3em;
 
   /* First paragraph badge - black filled circle */
@@ -85,8 +85,8 @@ aside.ids-footnote {
     width: 1.3em;
     height: 1.3em;
     border-radius: 50%;
-    background: rgb(var(--ids__text-RGB));
-    color: rgb(var(--ids__background-RGB));
+    background: var(--mdlt-text);
+    color: var(--mdlt-background);
     font-size: 1em;
     line-height: 1;
     margin-right: 0.3em;
@@ -100,8 +100,8 @@ aside.ids-footnote {
   /* Scrollability */
   &.scrollable {
     box-shadow:
-      0 0.5em 1em rgba(var(--ids__text-RGB), 0.5),
-      0 -10em 0 rgba(var(--ids__text-RGB), 0.3);
+      0 0.5em 1em color-mix(in srgb, var(--mdlt-text) 50%, transparent),
+      0 -10em 0 color-mix(in srgb, var(--mdlt-text) 30%, transparent);
     overflow: auto;
   }
 }
@@ -123,7 +123,7 @@ aside.ids-footnote {
     margin-bottom: 0;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    box-shadow: 0 0.5em 1em rgba(var(--ids__text-RGB), 0.3);
+    box-shadow: 0 0.5em 1em color-mix(in srgb, var(--mdlt-text) 30%, transparent);
   }
 }
 
@@ -142,7 +142,7 @@ html:has(.ids-footnote.scrollable) {
   width: 100%;
   background-color: transparent;
   border: none;
-  color: rgba(var(--ids__link-RGB), 1);
+  color: var(--mdlt-text-link);
   cursor: pointer;
   font-size: 0.9em;
   padding: 0.5em 0;
@@ -150,7 +150,7 @@ html:has(.ids-footnote.scrollable) {
 
   &:hover,
   &:active {
-    color: rgba(var(--ids__hover-RGB), 1);
+    color: var(--mdlt-text-hover);
   }
 
   svg {

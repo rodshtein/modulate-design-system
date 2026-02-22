@@ -1,19 +1,19 @@
 .ids {
   & a {
-    color: rgb(var(--ids__link-RGB));
+    color: var(--mdlt-text-link);
     text-decoration: underline;
     will-change: color;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.2em;
     text-decoration-skip-ink: none;
-    text-decoration-color: rgba(var(--ids__link-RGB), 0.2);
+    text-decoration-color: color-mix(in srgb, var(--mdlt-text-link) 20%, transparent);
     transition:
       color 0.5s ease,
       text-decoration 0.5s ease;
 
     &:hover {
-      color: rgb(var(--ids__hover-RGB));
-      text-decoration-color: rgba(var(--ids__hover-RGB), 0.2);
+      color: var(--mdlt-text-hover);
+      text-decoration-color: color-mix(in srgb, var(--mdlt-text-hover) 20%, transparent);
       transition:
         color 0s ease,
         text-decoration 0s ease;
@@ -26,11 +26,11 @@
     & a {
       display: inline-block;
       padding: 0.45em 0.6em 0.5em;
-      border: 1px solid rgba(var(--ids__text-RGB), 0.5);
+      border: 1px solid color-mix(in srgb, var(--mdlt-text) 50%, transparent);
       border-right: 0;
 
       &:hover {
-        background-color:rgba(var(--ids__hover-RGB), 0.1)
+        background-color: color-mix(in srgb, var(--mdlt-text-hover) 10%, transparent);
       }
 
       &:first-child {
@@ -41,12 +41,12 @@
       &:last-child {
         border-radius: 0 0.3em 0.3em 0;
         padding-right: 1em;
-        border-right: 1px solid rgba(var(--ids__text-RGB), 0.5)
+        border-right: 1px solid color-mix(in srgb, var(--mdlt-text) 50%, transparent);
       }
 
       &.active {
-        color: RGB(var(--ids__text-RGB));
-        background-color: rgba(var(--ids__text-RGB), 0.05);
+        color: var(--mdlt-text);
+        background-color: color-mix(in srgb, var(--mdlt-text) 5%, transparent);
         -webkit-text-decoration: none;
         text-decoration: none;
         cursor: default;
@@ -60,7 +60,7 @@
 
   & p {
     margin-top: 0;
-    margin-bottom: calc(var(--ids__density) * 0.4em);
+    margin-bottom: 0.52em;
 
     &.loud {
       font-size: 2em;
@@ -96,10 +96,10 @@
   }
 
   & h1 {
-    font-size: 3.6em;
+    font-size: 2.2em;
     font-weight: 700;
     letter-spacing: -0.01em;
-    line-height: calc(var(--ids__density) / 1.3);
+    line-height: 1;
     margin-bottom: 0.4em;
 
     @media (width < 767px) {
@@ -119,7 +119,7 @@
   & h2 {
     font-size: 2.4em;
     font-weight: 650;
-    line-height: calc(var(--ids__density) / 1.2);
+    line-height: 1.083;
     margin-bottom: 0.5em;
 
     &.XS {
@@ -130,19 +130,19 @@
 
   & h3 {
     font-size: 1.5em;
-    line-height: calc(var(--ids__density) / 1.1);
+    line-height: 1.182;
     margin-bottom: 0.6em;
   }
 
   & h4 {
     font-size: 1.1em;
-    line-height: var(--ids__density);
+    line-height: 1.3;
     margin-bottom: 0.5em;
   }
 
   & h5 {
     font-size: 1em;
-    line-height: var(--ids__density);
+    line-height: 1.3;
     margin-bottom: 0.5em;
   }
 
@@ -150,7 +150,7 @@
     font-size: 0.8em;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    line-height: var(--ids__density);
+    line-height: 1.3;
     margin-bottom: 0.5em;
   }
 
@@ -160,25 +160,25 @@
   }
 
   & mark {
-    color: rgb(var(--ids__text-RGB));
-    background-color: rgb(var(--ids__mark-RGB));
+    color: var(--mdlt-text);
+    background-color: var(--mdlt-bg-mark);
   }
 
   & ul,
   & ol {
-    margin: 0 0 calc(var(--ids__density) * 0.75em) 0;
+    margin: 0 0 0.975em 0;
     padding: 0;
 
     & li {
       position: relative;
-      margin-bottom: calc(var(--ids__density) * 0.5em);
+      margin-bottom: 0.65em;
     }
   }
 
   & ul {
     & li {
       list-style-type: none;
-      padding-left: calc(var(--ids__density) * 0.75em);
+      padding-left: 0.975em;
 
       &:before {
         position: absolute;
@@ -196,24 +196,34 @@
 
   & blockquote {
     font-size: 1.4em;
-    line-height: var(--ids__density);
+    line-height: 1.3;
     margin: 0;
-    padding-left: calc(var(--ids__density) * 0.75em);
-    margin-bottom: calc(var(--ids__density) * 1em);
+    padding-left: 0.975em;
+    margin-bottom: 1.3em;
   }
 
   & aside {
     margin: 0;
-    margin-bottom: calc(var(--ids__density) * 0.5em);
-    background: rgb(var(--ids__surface-RGB));
-    padding-top: calc(var(--ids__density) * 0.4em);
-    padding-right: calc(var(--ids__density) * 1.5em);
-    padding-bottom: calc(var(--ids__density) * 0.4em);
-    padding-left: calc(var(--ids__density) * 0.5em);
+    margin-bottom: 0.65em;
+    background: var(--mdlt-bg-surface);
+    padding-top: 0.52em;
+    padding-right: 1.95em;
+    padding-bottom: 0.52em;
+    padding-left: 0.65em;
     border-radius: 0.2em;
 
     @media (width < 767px) {
-      padding-right: calc(var(--ids__density) * 0.75em);
+      padding-right: 0.975em;
+    }
+
+    &.code {
+      color: var(--mdlt-code);
+      background: color-mix(in srgb, var(--mdlt-code) 10%, transparent);
+
+      & h4 {
+        font-size: 0.8rem;
+        opacity: 0.5;
+      }
     }
   }
 
@@ -224,13 +234,13 @@
     font-weight: 450;
     padding: 0.1em 0.25em;
     border-radius: 0.2em;
-    color: rgba(var(--ids__code-RGB), 1);
-    border: 1px solid rgba(var(--ids__code-RGB), 0.1);
-    background: rgba(var(--ids__code-RGB), 0.1);
+    color: var(--mdlt-code);
+    border: 1px solid color-mix(in srgb, var(--mdlt-code) 10%, transparent);
+    background: color-mix(in srgb, var(--mdlt-code) 10%, transparent);
   }
 
   & figure {
-    margin: 0 0 calc(var(--ids__density) * 0.5em) 0;
+    margin: 0 0 0.65em 0;
 
     &.XXS,
     &.ids__figure__XXS {
@@ -246,9 +256,9 @@
     }
 
     & figcaption {
-      margin-top: calc(var(--ids__density) * 0.25em);
+      margin-top: 0.325em;
       font-size: 0.8em;
-      line-height: var(--ids__density);
+      line-height: 1.3;
       opacity: 0.7;
     }
   }
@@ -282,7 +292,7 @@
         position: sticky;
         top: 0px;
         text-align: left;
-        border-bottom: 2px solid rgba(var(--ids__text-RGB), 1);
+        border-bottom: 2px solid var(--mdlt-text);
         padding-bottom: 0.3em;
         background-color: inherit;
 
@@ -293,7 +303,7 @@
 
       & td {
         padding: 0.8em 0.5em 1em 0;
-        border-bottom: 1px solid rgba(var(--ids__text-RGB), 0.5);
+        border-bottom: 1px solid color-mix(in srgb, var(--mdlt-text) 50%, transparent);
         vertical-align: top;
       }
 
@@ -306,7 +316,7 @@
   }
 
   & hr {
-    border-top-color: rgba(var(--ids__text-RGB), 0.2);
+    border-top-color: color-mix(in srgb, var(--mdlt-text) 20%, transparent);
     border-bottom: 0;
   }
 }

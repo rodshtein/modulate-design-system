@@ -1,32 +1,60 @@
-.text-with-icons {
-  & .nobr {
-    white-space: nowrap;
+/* Color palette plates (from modulate-design) */
+.guide-color-plate {
+  padding: 0.5em 0.5em 2.36em 0.5em;
+  font-size: 0.7em;
+  line-height: 1;
+  min-height: 7em;
+}
+
+/* Emotion colors showcase (from modulate-design) */
+.emotion-colors-showcase {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.2em;
+  margin-bottom: 2em;
+}
+
+.emotion-group {
+  background-color: var(--mdlt-bg-surface);
+  padding: 0.8em 2em 2em 1em;
+
+  & .emotion-group-header {
+    margin-bottom: 0.6em;
+
+    & h3 {
+      margin: 0;
+      font-weight: 500;
+      color: color-mix(in srgb, var(--mdlt-text) 70%, transparent);
+    }
   }
 
-  & .emotion-icon,
-  & .behaviour-icon {
-    display: inline-block;
-    width: 0.7em;
-    height: 0.7em;
-    vertical-align: middle;
-    margin-right: -0.05em;
-    position: relative;
-    top: -0.05em;
-  }
+  & .emotion-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.1em;
 
-  & .behaviour-icon {
-    color: currentColor;
-    width: 0.85em;
-    height: 0.85em;
-    margin-right: -0.15em;
+    & .emotion-color-sample {
+      padding: 0.3em 0.6em;
+      color: white;
+    }
   }
 }
 
-.page404 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 70vh;
+/* UI Structure Visualizer */
+.ui-structure-container {
+  font-family: monospace;
+  font-size: 0.7em;
+  line-height: 1.3;
+  white-space: pre;
+}
+
+.ui-route-block {
+  margin: 0 0 1em 0;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  white-space: pre;
+  background: none;
+  border: none;
 }

@@ -1,63 +1,92 @@
-.ids__navbar {    
-    display: block;
-    position: fixed;
-    top: 0.3em;
-    left: 0.3em;
-    z-index: 1;
+.ids__navbar {
+  display: inline-block;
 
-    @media (width < 767px) { 
-        position: static;
-        margin: 1em 0;
-
-    }
-}
-
-.ids__navbar ul li {
-    font-size: 0.8em;
-    border: solid 1px transparent;
-    
+  & ul {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
     padding: 0;
-    margin-bottom: 0;
-    
+    border: 2px solid var(--mdlt-text);
+    border-radius: 0.4em;
+    overflow: hidden;
+
+    @media (width < 767px) {
+      flex-direction: column;
+      width: max-content;
+    }
+  }
+
+  & ul li {
+    margin: 0;
+    padding: 0;
+    border-right: 1px solid
+      color-mix(in srgb, var(--mdlt-text) 20%, transparent);
+
+    &:last-child {
+      border-right: none;
+    }
+
+    @media (width < 767px) {
+      border-right: none;
+      border-bottom: 1px solid
+        color-mix(in srgb, var(--mdlt-text) 20%, transparent);
+
+      &:last-child {
+        border-bottom: none;
+
+        & a {
+          padding-bottom: 0.5em;
+        }
+      }
+    }
+
     &::before {
-        content: '';
+      content: "";
     }
 
-    @media (width < 767px) { 
-        font-size: 1em;
-    }
-    
-    a {
-        padding: 0.2em 0.5em 0.2em 0.3em;
-        border-radius: 0.2em;
-        display: block;
+    & a {
+      display: block;
+      padding: 0.3em 0.8em;
+      font-size: 0.8em;
+      font-weight: 500;
+      text-decoration: none;
+      color: var(--mdlt-text);
+
+      @media (width < 767px) {
+        padding-right: 2em;
+      }
+
+      &:hover {
+        color: var(--mdlt-text-hover);
+        background-color: color-mix(
+          in srgb,
+          var(--mdlt-text-hover) 10%,
+          transparent
+        );
         text-decoration: none;
-
-        @media (width < 767px) { 
-            padding: 0.2em 0;
-        }
+      }
     }
+  }
+
+  & .current {
+    & a {
+      background-color: color-mix(
+        in srgb,
+        var(--mdlt-text-link) 8%,
+        transparent
+      );
+
+      &:hover {
+        background-color: color-mix(
+          in srgb,
+          var(--mdlt-text-hover) 10%,
+          transparent
+        );
+        color: var(--mdlt-text-hover);
+      }
+    }
+  }
 }
 
-.ids__navbar .current {
-
-    a {
-        background-color: rgba(var(--ids__link-RGB), 0.1);
-
-        @media (width < 767px) { 
-            background-color: transparent;
-        }
-
-        &:hover {
-            background-color: rgba(var(--ids__hover-RGB), 0.1);
-            @media (width < 767px) { 
-            background-color: transparent;
-        }
-        }
-    }
-
-    
-    
-}
 .ids__nav-item {
 }
