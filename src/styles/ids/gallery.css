@@ -11,7 +11,7 @@ ids-gallery, .ids__gallery {
         flex: 0 0 5em;
 
         &:focus-within:has(a:focus-visible) {
-            outline: 2px solid rgb(var(--ids__link-RGB));
+            outline: 2px solid var(--mdlt-text-link);
             outline-offset: 2px;
         }
 
@@ -37,14 +37,14 @@ ids-gallery, .ids__gallery {
     display: grid;
     left: 0;
     right: 0;
-    bottom: calc(var(--ids__density, 1.5) * 1em);
+    bottom: 1.3em;
 
     figcaption {
         place-self: center;
-        color: rgb(var(--ids__background-RGB));
-        background: rgba(var(--ids__text-RGB), 0.8);
+        color: var(--mdlt-background);
+        background: color-mix(in srgb, var(--mdlt-text) 80%, transparent);
         font-size: 0.8em;
-        line-height: var(--ids__density, 1.5);
+        line-height: 1.3;
         padding: 0.4em 0.8em;
         text-align: center;
         max-width: 80%;

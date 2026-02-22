@@ -1,0 +1,57 @@
+- route: /login
+  title: Login
+  sections:
+    - component: LoginForm
+
+- route: /signup
+  title: Signup
+  sections:
+    - component: EmailSignup
+      states:
+        - email-sent
+    - component: EmailVerification
+      states:
+        - verified
+    - component: PasswordCreation
+
+- route: /dashboard
+  title: Dashboard
+  sections:
+    - component: ApiKeySection
+    - component: ApiKeyRegenerate
+    - component: CreditsSection
+    - component: CreditsRedeem
+    - component: CreditsSpent
+    - component: CreditsOutOfCredits
+      states:
+        - empty
+    - component: CreditsBuy
+    - component: ApiDocsLink
+    - component: PricingLink
+
+- route: /playground
+  title: Playground
+  sections:
+    - component: InputConfig
+    - component: OutputConfig
+
+- route: /account
+  title: Account
+  sections:
+    - component: ChangePassword
+    - component: AccountDeactivation
+      states:
+        - confirm
+
+- route: /billing
+  title: Billing
+  sections:
+    - component: PaymentMethodsList
+    - component: ConnectPaymentMethod
+    - component: PaymentMethodFailure
+      states:
+        - failure
+    - component: UpdatePaymentMethod
+    - component: RemovePaymentMethod
+      states:
+        - confirm
