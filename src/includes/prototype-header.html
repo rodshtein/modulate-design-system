@@ -1,5 +1,17 @@
 <header class="prototype-header">
   <div class="prototype-header__icon-wrap">
-    {% include 'prototype-header-icon.html' %}
+    {% include 'assets/prototype-header-icon.html' %}
+  </div>
+  <div class="prototype-header__theme">
+    <button
+      type="button"
+      class="theme-toggle"
+      role="switch"
+      aria-checked="true"
+      aria-label="Тёмная тема">
+      <span class="theme-toggle__track">
+        <span class="theme-toggle__thumb"></span>
+      </span>
+    </button>
   </div>
 </header>
