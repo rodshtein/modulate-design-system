@@ -1562,6 +1562,29 @@ div.pswp__img--placeholder,
   --emotion-unknown: var(--emotion-neutral-group);
 }
 
+.prototype-header {
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+
+  & .prototype-header__icon-wrap {
+    width: 1.5em;
+    height: 1.5em;
+    flex-shrink: 0;
+  }
+
+  & .prototype-header__icon {
+    display: block;
+    width: 1em;
+    height: 1em;
+    color: var(--m__text-inverted-color);
+  }
+
+  .dark-mode & .prototype-header__icon {
+    color: var(--m__text-color);
+  }
+}
+
 .dashboard-layout {
   display: grid;
   grid-template-columns: 1fr 3fr;
