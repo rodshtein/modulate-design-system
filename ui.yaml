@@ -18,6 +18,38 @@
           - organization
           - users
 
+- route: /dashboard/api-keys/
+  title: API Keys
+  sections:
+    - section:
+        content: api-keys-intro
+    - section:
+        content: api-keys-table
+
+- route: /dashboard/models/
+  title: Models
+  sections:
+    - section:
+        content: models-intro
+    - section:
+        content: velma-stt-batch
+    - section:
+        content: velma-stt-batch-english-fast
+    - section:
+        content: velma-stt-streaming
+
+- route: /dashboard/documentation/
+  title: Documentation
+  sections:
+    - section:
+        content: documentation-intro
+    - section:
+        content: velma-models
+    - section:
+        content: feature-comparison
+    - section:
+        content: auth-rate-limits
+
 - route: /dashboard/usage/
   title: Usage
   sections:
@@ -27,6 +59,21 @@
         content: filters
     - section:
         content: request-log
+
+- route: /dashboard/billing/
+  title: Billing
+  sections:
+    - section:
+        content: billing-intro
+    - section:
+        components:
+          - StatCard
+    - section:
+        content: apply-credit-code
+    - section:
+        content: purchase-credits
+    - section:
+        content: billing-history
 
 - route: /dashboard/account/
   title: Account
@@ -44,31 +91,6 @@
     - section:
         content: delete-account
 
-- route: /dashboard/billing/
-  title: Billing
-  sections:
-    - section:
-        content: billing-intro
-    - section:
-        components:
-          - StatCard
-    - section:
-        content: apply-credit-code
-    - section:
-        content: purchase-credits
-    - section:
-        content: billing-history
-
-- route: /dashboard/api-keys/
-  title: API Keys
-  sections:
-    - section:
-        content: api-keys-intro
-    - section:
-        content: active-keys
-    - section:
-        content: inactive-keys
-
 - route: /dashboard/organization/
   title: Organization
   sections:
@@ -76,27 +98,3 @@
         content: organization-intro
     - section:
         content: organization-details
-
-- route: /dashboard/documentation/
-  title: Documentation
-  sections:
-    - section:
-        content: documentation-intro
-    - section:
-        content: velma-models
-    - section:
-        content: feature-comparison
-    - section:
-        content: auth-rate-limits
-
-- route: /dashboard/models/
-  title: Models
-  sections:
-    - section:
-        content: models-intro
-    - section:
-        content: velma-stt-batch
-    - section:
-        content: velma-stt-batch-english-fast
-    - section:
-        content: velma-stt-streaming

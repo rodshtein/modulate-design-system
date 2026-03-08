@@ -13,7 +13,7 @@ permalink: /dashboard/api-keys/
     </aside>
 
     <main class="dashboard-content">
-      <div class="dashboard-section">
+      <section class="dashboard-section" data-component="api-keys-intro">
         <h2>API Keys</h2>
         <p>
           API keys authenticate your requests. Model keys provide access to
@@ -22,23 +22,25 @@ permalink: /dashboard/api-keys/
           not modify it. Key values are shown once at creation and cannot be
           retrieved later.
         </p>
-      </div>
+        <p>
+          <button type="button" class="m__button">Create API key</button>
+        </p>
+      </section>
 
-      <div class="dashboard-section">
+      <section
+        class="dashboard-section m__card"
+        data-component="api-keys-table">
         <h2>Active keys</h2>
         <p>
           No active API keys. Create your first key to start making API
           requests.
         </p>
-      </div>
-
-      <div class="dashboard-section">
         <h2>Inactive keys</h2>
         <p>
           Deactivated keys are listed here. They can no longer authenticate
           requests but remain visible for reference.
         </p>
-      </div>
+      </section>
     </main>
   </div>
   <div class="m__space XL"></div>

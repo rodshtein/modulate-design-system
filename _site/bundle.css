@@ -100,15 +100,16 @@ body {
 .dark-mode {
   /* TEXT */
   --m__text-color: rgb(180, 180, 190);
-  --m__text-caption-color: rgb(128, 128, 128);
   --m__text-link-color: rgb(255, 255, 255);
-  --m__text-inverted-color: rgb(20, 20, 30);
   --m__text-hover-color: rgb(120, 180, 255);
+  --m__text-caption-color: rgb(128, 128, 128);
+  --m__text-inverted-color: rgb(20, 20, 30);
+  --m__text-accent-color: rgb(180, 180, 190);
 
   /* BACKGROUND */
   --m__background-color: rgb(20, 20, 25);
   --m__bg-surface-color: rgb(27, 27, 39);
-  --m__bg-accent-color: rgb(20, 20, 50);
+  --m__bg-accent-color: rgb(220, 220, 250);
   --m__bg-hover-color: rgb(100, 110, 140);
   --m__bg-mark-color: rgb(255, 200, 29);
 
@@ -187,6 +188,11 @@ body {
 :root {
   --m__card-radius: 0.75rem;
   --m__card-padding: 1rem;
+}
+
+:root {
+  --m__button-padding: 0.5rem 1rem;
+  --m__button-radius: 0.5rem;
 }
 
 .m__space {
@@ -1786,6 +1792,22 @@ aside.nav-sidebar {
   background-color: var(--m__bg-surface-color);
   border-radius: var(--m__card-radius);
   padding: var(--m__card-padding);
+}
+
+.m__button {
+  display: inline-block;
+  padding: var(--m__button-padding);
+  background-color: var(--m__bg-accent-color);
+  color: var(--m__text-inverted-color);
+  border: none;
+  border-radius: var(--m__button-radius);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    background-color: var(--m__bg-hover-color);
+  }
 }
 
 .dashboard-content {
