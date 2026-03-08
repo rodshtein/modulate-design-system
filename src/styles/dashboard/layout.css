@@ -43,6 +43,22 @@ aside.nav-sidebar {
   padding: var(--m__card-padding);
 }
 
+.m__button {
+  display: inline-block;
+  padding: var(--m__button-padding);
+  background-color: var(--m__bg-accent-color);
+  color: var(--m__text-inverted-color);
+  border: none;
+  border-radius: var(--m__button-radius);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    background-color: var(--m__bg-hover-color);
+  }
+}
+
 .dashboard-content {
   & .dashboard-section {
     margin-bottom: 0.5rem;
