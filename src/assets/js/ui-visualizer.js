@@ -90,16 +90,25 @@ function renderSectionsList(sections, listClass) {
     const li = document.createElement('li');
     li.className = `ui-viz__section ui-viz__section--${section.type}`;
     if (section.type === 'widget') {
+      const frame = document.createElement('div');
+      frame.className = 'ui-viz__section-frame';
+      const subList = document.createElement('ul');
+      subList.className = 'ui-viz__section-frame-list';
+      const subLi = document.createElement('li');
+      subLi.className = 'ui-viz__section-frame-item';
       const widgetSpan = document.createElement('span');
       widgetSpan.className = 'ui-viz__widget';
       widgetSpan.textContent = section.widget;
-      li.appendChild(widgetSpan);
+      subLi.appendChild(widgetSpan);
       if (section.states && section.states.length > 0) {
         const statesEl = document.createElement('span');
         statesEl.className = 'ui-viz__states';
         statesEl.textContent = ` (${section.states.join(', ')})`;
-        li.appendChild(statesEl);
+        subLi.appendChild(statesEl);
       }
+      subList.appendChild(subLi);
+      frame.appendChild(subList);
+      li.appendChild(frame);
     } else if (section.type === 'widgets' && section.widgets && section.widgets.length > 0) {
       const frame = document.createElement('div');
       frame.className = 'ui-viz__section-frame';

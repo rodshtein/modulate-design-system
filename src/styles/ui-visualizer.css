@@ -228,14 +228,30 @@ aside.ui-arch-diagram {
 
   & .ui-viz__sections {
     margin: 0;
-    list-style: disc;
+    padding: 0;
+    list-style: none;
   }
 
   & .ui-viz__section {
+    position: relative;
     margin-bottom: 0.25em;
+    padding-left: 0.8rem;
+
+    &::before {
+      position: absolute;
+      left: 0;
+      content: "⋅ ";
+    }
   }
 
+  & .ui-viz__section--widget,
   & .ui-viz__section--widgets {
+    padding-left: 0;
+
+    &::before {
+      content: none;
+    }
+
     & .ui-viz__section-frame {
       display: inline-block;
       margin-top: 0.25em;
@@ -247,11 +263,24 @@ aside.ui-arch-diagram {
 
     & .ui-viz__section-frame-list {
       margin: 0;
-      list-style: disc;
+      padding: 0;
+      list-style: none;
     }
 
     & .ui-viz__section-frame-item {
+      position: relative;
       margin-bottom: 0.1em;
+      padding-left: 0.8rem;
+
+      &::before {
+        position: absolute;
+        left: 0;
+        content: "⋅ ";
+      }
+    }
+
+    & .ui-viz__section-frame-item:last-child {
+      margin-bottom: 0;
     }
   }
 

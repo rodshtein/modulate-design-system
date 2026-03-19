@@ -162,8 +162,8 @@ body {
   --m__radius-m: 0.4rem;
   --m__radius-l: 0.75rem;
 
-  --m__card-radius: var(--m__radius-l);
-  --m__card-padding: 1rem;
+  --m__widget-radius: var(--m__radius-l);
+  --m__widget-padding: 1rem;
 }
 
 :root {
@@ -1639,7 +1639,7 @@ div.pswp__img--placeholder,
     gap: 0.5rem;
     min-width: 5.5rem;
     padding: 0.75rem;
-    border-radius: var(--m__card-radius);
+    border-radius: var(--m__widget-radius);
     background-color: var(--m__bg-surface-color);
   }
 
@@ -1904,14 +1904,30 @@ aside.ui-arch-diagram {
 
   & .ui-viz__sections {
     margin: 0;
-    list-style: disc;
+    padding: 0;
+    list-style: none;
   }
 
   & .ui-viz__section {
+    position: relative;
     margin-bottom: 0.25em;
+    padding-left: 0.8rem;
+
+    &::before {
+      position: absolute;
+      left: 0;
+      content: "⋅ ";
+    }
   }
 
+  & .ui-viz__section--widget,
   & .ui-viz__section--widgets {
+    padding-left: 0;
+
+    &::before {
+      content: none;
+    }
+
     & .ui-viz__section-frame {
       display: inline-block;
       margin-top: 0.25em;
@@ -1923,11 +1939,24 @@ aside.ui-arch-diagram {
 
     & .ui-viz__section-frame-list {
       margin: 0;
-      list-style: disc;
+      padding: 0;
+      list-style: none;
     }
 
     & .ui-viz__section-frame-item {
+      position: relative;
       margin-bottom: 0.1em;
+      padding-left: 0.8rem;
+
+      &::before {
+        position: absolute;
+        left: 0;
+        content: "⋅ ";
+      }
+    }
+
+    & .ui-viz__section-frame-item:last-child {
+      margin-bottom: 0;
     }
   }
 
@@ -2071,7 +2100,7 @@ aside.ui-arch-diagram {
     min-width: 12rem;
     padding: 0.2rem 0.2rem 0.6rem 0.2rem;
     background-color: var(--m__background-color);
-    border-radius: var(--m__card-radius);
+    border-radius: var(--m__widget-radius);
     border: 1px solid var(--m__ui-border-color);
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
     z-index: 100;
@@ -2283,10 +2312,10 @@ aside.nav-sidebar {
   }
 }
 
-.m__card {
+.m__widget {
   background-color: var(--m__bg-surface-color);
-  border-radius: var(--m__card-radius);
-  padding: var(--m__card-padding);
+  border-radius: var(--m__widget-radius);
+  padding: var(--m__widget-padding);
 }
 
 a.m__button,
@@ -2417,8 +2446,8 @@ button.m__button-secondary-compact {
   & .stat-card {
     margin-bottom: var(--m__default-margin-bottom);
     background-color: var(--m__bg-surface-color);
-    border-radius: var(--m__card-radius);
-    padding: var(--m__card-padding);
+    border-radius: var(--m__widget-radius);
+    padding: var(--m__widget-padding);
 
     & .stat-card__label {
       font-size: var(--m__font-size-s);

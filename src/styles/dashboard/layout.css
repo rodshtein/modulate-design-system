@@ -54,10 +54,10 @@ aside.nav-sidebar {
   }
 }
 
-.m__card {
+.m__widget {
   background-color: var(--m__bg-surface-color);
-  border-radius: var(--m__card-radius);
-  padding: var(--m__card-padding);
+  border-radius: var(--m__widget-radius);
+  padding: var(--m__widget-padding);
 }
 
 a.m__button,
@@ -188,8 +188,8 @@ button.m__button-secondary-compact {
   & .stat-card {
     margin-bottom: var(--m__default-margin-bottom);
     background-color: var(--m__bg-surface-color);
-    border-radius: var(--m__card-radius);
-    padding: var(--m__card-padding);
+    border-radius: var(--m__widget-radius);
+    padding: var(--m__widget-padding);
 
     & .stat-card__label {
       font-size: var(--m__font-size-s);
