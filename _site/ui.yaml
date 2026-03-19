@@ -1,5 +1,6 @@
-product:
-  - route: /index-landing/
+current:
+  - id: landing
+    route: /web/landing.html
     title: Landing
     sections:
       - section:
@@ -12,53 +13,96 @@ product:
       - section:
           text-content: built-for-developers
       - section:
-          text-content: learn-more
+          widgets:
+            - learn-more-modulate
+            - learn-more-ensemble
+            - learn-more-velma
       - section:
-          text-content: cta
+          widget: cta
 
-  - route: /dashboard/overview/
+  - id: docs
+    route: /web/docs.html
+    title: Docs
+    sections:
+      - section:
+          text-content: model-comparison
+      - section:
+          text-content: auth-rate-limits
+      - section:
+          text-content: view-docs-cta
+
+  - id: docs-model-documentation
+    route: /web/docs.html#model-docs
+    title: Model Documentation
+    sections:
+      - section:
+          widget: model-selector
+      - section:
+          widget: model-info
+
+  - id: docs-examples
+    route: /web/docs.html#examples
+    title: Examples
+    sections:
+      - section:
+          text-content: examples-coming-soon
+
+  - id: docs-admin-apis
+    route: /web/docs.html#admin-apis
+    title: Admin APIs
+    sections:
+      - section:
+          widget: api-spec-selector
+      - section:
+          widget: api-spec-viewer
+
+  - id: playground
+    route: —
+    title: Playground
+    sections: []
+
+  - id: conversations
+    route: —
+    title: Conversations
+    sections: []
+
+  - id: dashboard-overview
+    route: /web
     title: Overview
     sections:
       - section:
-          widget: organization
-      - section:
           widgets:
+            - organization
             - users
             - credit-balance-stat
             - all-time-hours
             - all-time-credits-used
       - section:
-          widget: usage-by-model
-      - section:
-          widget: requests-by-status
+          widgets:
+            - usage-by-model
+            - requests-by-status
       - section:
           widget: credit-balance-over-time
       - section:
           widget: recent-usage
 
-  - route: /dashboard/api-keys/
+  - id: dashboard-api-keys
+    route: /web/api-keys.html
     title: API Keys
     sections:
       - section:
-          text-content: api-keys-intro
+          widget: api-keys-intro
       - section:
-          text-content: api-keys-table
+          widget: api-keys-table
 
-  - route: /dashboard/models/
+  - id: dashboard-models
+    route: /web/models.html
     title: Models
     sections:
       - section:
           text-content: models-intro
       - section:
-          text-content: velma-music-detection
-      - section:
-          text-content: velma-stt-batch
-      - section:
-          text-content: velma-stt-batch-english-fast
-      - section:
-          text-content: velma-stt-streaming
-      - section:
-          text-content: velma-synthetic-voice-detection
+          widget: model-selector
       - section:
           widgets:
             - model-credits-consumed
@@ -66,29 +110,19 @@ product:
       - section:
           widget: model-recent-requests
 
-  - route: /dashboard/documentation/
-    title: Documentation
-    sections:
-      - section:
-          text-content: documentation-intro
-      - section:
-          text-content: velma-models
-      - section:
-          text-content: model-comparison
-      - section:
-          text-content: auth-rate-limits
-
-  - route: /dashboard/usage/
+  - id: dashboard-usage
+    route: /web/usage.html
     title: Usage
     sections:
       - section:
-          text-content: usage-log
+          text-content: usage-intro
       - section:
-          text-content: filters
+          widget: filters
       - section:
-          text-content: request-log
+          widget: request-log
 
-  - route: /dashboard/billing/
+  - id: dashboard-billing
+    route: /web/billing.html
     title: Billing
     sections:
       - section:
@@ -98,11 +132,12 @@ product:
             - credit-balance
             - apply-credit-code
       - section:
-          text-content: purchase-credits
+          widget: purchase-credits
       - section:
-          text-content: billing-history
+          widget: billing-history
 
-  - route: /dashboard/account/
+  - id: dashboard-account
+    route: /dashboard/account/
     title: Account
     sections:
       - section:
@@ -120,7 +155,8 @@ product:
       - section:
           text-content: delete-account
 
-  - route: /dashboard/organization/
+  - id: dashboard-organization
+    route: /dashboard/organization/
     title: Organization
     sections:
       - section:
@@ -132,7 +168,8 @@ product:
       - section:
           text-content: pending-invites
 
-  - route: /internal/users/
+  - id: internal-users
+    route: /internal/users/
     title: Users & Organizations
     sections:
       - section:
@@ -140,7 +177,8 @@ product:
       - section:
           widget: users-table
 
-  - route: /internal/data/
+  - id: internal-data
+    route: /internal/data/
     title: Data Management
     sections:
       - section:
@@ -148,7 +186,8 @@ product:
       - section:
           widget: data-export
 
-  - route: /internal/invites/
+  - id: internal-invites
+    route: /internal/invites/
     title: Invites & Credits
     sections:
       - section:
@@ -156,7 +195,8 @@ product:
       - section:
           widget: invites-table
 
-  - route: /internal/usage/
+  - id: internal-usage
+    route: /internal/usage/
     title: Platform Usage
     sections:
       - section:
@@ -175,7 +215,8 @@ product:
             - usage-by-model
             - credit-consumption
 
-  - route: /internal/overrides/
+  - id: internal-overrides
+    route: /internal/overrides/
     title: Org Overrides
     sections:
       - section:
@@ -185,7 +226,8 @@ product:
       - section:
           widget: bulk-tag-overrides
 
-  - route: /internal/reports/
+  - id: internal-reports
+    route: /internal/reports/
     title: Reports
     sections:
       - section:
@@ -193,7 +235,8 @@ product:
       - section:
           widget: report-generator
 
-  - route: /internal/models/
+  - id: internal-models
+    route: /internal/models/
     title: Model Management
     sections:
       - section:
@@ -209,30 +252,43 @@ product:
       - section:
           text-content: velma-synthetic-voice-detection
 
-  - route: /auth/login/
+  - id: auth-login
+    route: /auth/login/
     title: Sign in
     sections:
       - section:
           widget: login-form
 
-  - route: /auth/signup/
+  - id: auth-signup
+    route: /auth/signup/
     title: Create account
     sections:
       - section:
           widget: signup-form
 
-  - route: /auth/reset-password/
+  - id: auth-reset-password
+    route: /auth/reset-password/
     title: Reset password
     sections:
       - section:
           widget: reset-password-form
 
-prototype:
-  - route: /index-landing/
+  - id: auth-org-select
+    route: /web/org-select.html
+    title: Select organization
+    sections:
+      - section:
+          widget: org-select
+      - section:
+          widget: org-create
+
+target:
+  - id: landing
+    route: /
     title: Landing
     sections:
       - section:
-          widget: hero
+          text-content: hero
       - section:
           widgets:
             - feature-transcription
@@ -245,79 +301,98 @@ prototype:
       - section:
           text-content: cta
 
-  - route: /dashboard/overview/
+  - id: docs
+    route: /docs
+    title: Docs
+    sections:
+      - section:
+          text-content: model-comparison
+      - section:
+          text-content: auth-rate-limits
+      - section:
+          text-content: view-docs-cta
+
+  - id: docs-model-documentation
+    route: /docs/models
+    title: Model Documentation
+    sections:
+      - section:
+          widget: model-selector
+      - section:
+          widget: model-info
+
+  - id: docs-examples
+    route: /docs/examples
+    title: Examples
+    sections:
+      - section:
+          text-content: examples-coming-soon
+
+  - id: docs-admin-apis
+    route: /docs/admin-apis
+    title: Admin APIs
+    sections:
+      - section:
+          widget: api-spec-selector
+      - section:
+          widget: api-spec-viewer
+
+  - id: playground
+    route: /playground
+    title: Playground
+    sections: []
+
+  - id: conversations
+    route: /conversations
+    title: Conversations
+    sections: []
+
+  - id: dashboard-overview
+    route: /dashboard/overview
     title: Overview
     sections:
       - section:
-          widget: organization
-      - section:
           widgets:
-            - users
             - credit-balance-stat
-            - all-time-hours
-            - all-time-credits-used
+            - credit-balance-over-time
       - section:
           widget: usage-by-model
       - section:
           widget: requests-by-status
       - section:
-          widget: credit-balance-over-time
-      - section:
           widget: recent-usage
+      - section:
+          widgets:
+            - organization
+            - users
 
-  - route: /dashboard/api-keys/
+  - id: dashboard-api-keys
+    route: /dashboard/api-keys
     title: API Keys
     sections:
       - section:
           text-content: api-keys-intro
       - section:
-          text-content: api-keys-table
+          widget: api-keys-table
 
-  - route: /dashboard/models/
+  - id: dashboard-models
+    route: —
     title: Models
-    sections:
-      - section:
-          text-content: models-intro
-      - section:
-          text-content: velma-music-detection
-      - section:
-          text-content: velma-stt-batch
-      - section:
-          text-content: velma-stt-batch-english-fast
-      - section:
-          text-content: velma-stt-streaming
-      - section:
-          text-content: velma-synthetic-voice-detection
-      - section:
-          widgets:
-            - model-credits-consumed
-            - model-requests-by-status
-      - section:
-          widget: model-recent-requests
+    sections: []
 
-  - route: /dashboard/documentation/
-    title: Documentation
-    sections:
-      - section:
-          text-content: documentation-intro
-      - section:
-          text-content: velma-models
-      - section:
-          text-content: model-comparison
-      - section:
-          text-content: auth-rate-limits
-
-  - route: /dashboard/usage/
+  - id: dashboard-usage
+    route: /dashboard/usage
     title: Usage
     sections:
       - section:
-          text-content: usage-log
+          text-content: usage-intro
       - section:
-          text-content: filters
+          widget: filters
       - section:
-          text-content: request-log
+          widget: request-log
 
-  - route: /dashboard/billing/
+  - id: dashboard-billing
+    route: /dashboard/billing/
     title: Billing
     sections:
       - section:
@@ -327,11 +402,12 @@ prototype:
             - credit-balance
             - apply-credit-code
       - section:
-          text-content: purchase-credits
+          widget: purchase-credits
       - section:
-          text-content: billing-history
+          widget: billing-history
 
-  - route: /dashboard/account/
+  - id: dashboard-account
+    route: /dashboard/account/
     title: Account
     sections:
       - section:
@@ -349,7 +425,8 @@ prototype:
       - section:
           text-content: delete-account
 
-  - route: /dashboard/organization/
+  - id: dashboard-organization
+    route: /dashboard/organization/
     title: Organization
     sections:
       - section:
@@ -361,21 +438,15 @@ prototype:
       - section:
           text-content: pending-invites
 
-  - route: /dashboard/behaviors/
+  - id: dashboard-behaviors
+    route: /dashboard/behaviors/
     title: Behaviors
     sections:
       - section:
           text-content: behaviors-intro
 
-  - route: /playground/
-    title: Playground
-    sections: []
-
-  - route: /conversations/
-    title: Conversations
-    sections: []
-
-  - route: /internal/users/
+  - id: internal-users
+    route: /internal/users/
     title: Users & Organizations
     sections:
       - section:
@@ -383,7 +454,8 @@ prototype:
       - section:
           widget: users-table
 
-  - route: /internal/data/
+  - id: internal-data
+    route: /internal/data/
     title: Data Management
     sections:
       - section:
@@ -391,7 +463,8 @@ prototype:
       - section:
           widget: data-export
 
-  - route: /internal/invites/
+  - id: internal-invites
+    route: /internal/invites/
     title: Invites & Credits
     sections:
       - section:
@@ -399,7 +472,8 @@ prototype:
       - section:
           widget: invites-table
 
-  - route: /internal/usage/
+  - id: internal-usage
+    route: /internal/usage/
     title: Platform Usage
     sections:
       - section:
@@ -418,7 +492,8 @@ prototype:
             - usage-by-model
             - credit-consumption
 
-  - route: /internal/overrides/
+  - id: internal-overrides
+    route: /internal/overrides/
     title: Org Overrides
     sections:
       - section:
@@ -428,7 +503,8 @@ prototype:
       - section:
           widget: bulk-tag-overrides
 
-  - route: /internal/reports/
+  - id: internal-reports
+    route: /internal/reports/
     title: Reports
     sections:
       - section:
@@ -436,7 +512,8 @@ prototype:
       - section:
           widget: report-generator
 
-  - route: /internal/models/
+  - id: internal-models
+    route: /internal/models/
     title: Model Management
     sections:
       - section:
@@ -452,20 +529,32 @@ prototype:
       - section:
           text-content: velma-synthetic-voice-detection
 
-  - route: /auth/login/
+  - id: auth-login
+    route: /auth/login/
     title: Sign in
     sections:
       - section:
           widget: login-form
 
-  - route: /auth/signup/
+  - id: auth-signup
+    route: /auth/signup/
     title: Create account
     sections:
       - section:
           widget: signup-form
 
-  - route: /auth/reset-password/
+  - id: auth-reset-password
+    route: /auth/reset-password/
     title: Reset password
     sections:
       - section:
           widget: reset-password-form
+
+  - id: auth-org-select
+    route: /auth/org-select/
+    title: Select organization
+    sections:
+      - section:
+          widget: org-select
+      - section:
+          widget: org-create
