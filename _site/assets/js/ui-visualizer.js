@@ -26,7 +26,7 @@ function waitForJsYaml(maxAttempts = 50, interval = 100) {
 
 /**
  * Normalizes raw YAML into a fixed shape. Extend here when ui.yaml format changes.
- * Expects { product: routes[], prototype: routes[] }. Each section is
+ * Expects { current: routes[], target: routes[] }. Each section is
  * { section: { widget? | widgets? | text-content? } }.
  * Normalized section has type: 'widget' | 'widgets' | 'text-content' and the
  * corresponding payload.
@@ -36,13 +36,10 @@ function normalizeSection(item) {
   if (!s || typeof s !== 'object') {
     return { type: 'widget', widget: '', states: [] };
   }
-  const hasLegacyComponentKeys =
-    s.component !== undefined || s.components !== undefined;
-  const hasNewWidgetKeys = s.widget !== undefined || s.widgets !== undefined;
   if (
     s['text-content'] !== undefined &&
-    !hasNewWidgetKeys &&
-    !hasLegacyComponentKeys &&
+    s.widget === undefined &&
+    s.widgets === undefined &&
     s.group === undefined
   ) {
     return {
@@ -52,10 +49,6 @@ function normalizeSection(item) {
   }
   if (s.widgets !== undefined) {
     return { type: 'widgets', widgets: Array.isArray(s.widgets) ? s.widgets : [] };
-  }
-  if (s.components !== undefined) {
-    // Legacy compatibility: keep old ui.yaml keys working.
-    return { type: 'widgets', widgets: Array.isArray(s.components) ? s.components : [] };
   }
   if (s.widget !== undefined) {
     return {
@@ -68,28 +61,17 @@ function normalizeSection(item) {
     const g = s.group;
     const widgets = Array.isArray(g.widgets)
       ? g.widgets
-      : Array.isArray(g.components)
-        ? g.components
-        : g.component !== undefined && g.component !== ''
-          ? [g.component]
-          : g.widget !== undefined && g.widget !== ''
-            ? [g.widget]
-            : [];
+      : g.widget !== undefined && g.widget !== ''
+        ? [g.widget]
+        : [];
     return { type: 'widgets', widgets };
-  }
-  if (s.component !== undefined) {
-    // Legacy compatibility: keep old ui.yaml keys working.
-    return {
-      type: 'widget',
-      widget: s.component ?? '',
-      states: Array.isArray(s.states) ? s.states : [],
-    };
   }
   return { type: 'widget', widget: '', states: [] };
 }
 
 function normalizeRouteList(routes) {
   return (routes ?? []).map((r) => ({
+    id: r.id ?? r.route ?? '',
     route: r.route ?? '',
     title: r.title ?? '',
     sections: (r.sections ?? []).map(normalizeSection),
@@ -97,9 +79,9 @@ function normalizeRouteList(routes) {
 }
 
 function normalizeUiData(raw) {
-  const product = normalizeRouteList(raw?.product);
-  const prototype = normalizeRouteList(raw?.prototype);
-  return { product, prototype };
+  const current = normalizeRouteList(raw?.current);
+  const target = normalizeRouteList(raw?.target);
+  return { current, target };
 }
 
 function renderSectionsList(sections, listClass) {
@@ -109,16 +91,25 @@ function renderSectionsList(sections, listClass) {
     const li = document.createElement('li');
     li.className = `ui-viz__section ui-viz__section--${section.type}`;
     if (section.type === 'widget') {
+      const frame = document.createElement('div');
+      frame.className = 'ui-viz__section-frame';
+      const subList = document.createElement('ul');
+      subList.className = 'ui-viz__section-frame-list';
+      const subLi = document.createElement('li');
+      subLi.className = 'ui-viz__section-frame-item';
       const widgetSpan = document.createElement('span');
       widgetSpan.className = 'ui-viz__widget';
       widgetSpan.textContent = section.widget;
-      li.appendChild(widgetSpan);
+      subLi.appendChild(widgetSpan);
       if (section.states && section.states.length > 0) {
         const statesEl = document.createElement('span');
         statesEl.className = 'ui-viz__states';
         statesEl.textContent = ` (${section.states.join(', ')})`;
-        li.appendChild(statesEl);
+        subLi.appendChild(statesEl);
       }
+      subList.appendChild(subLi);
+      frame.appendChild(subList);
+      li.appendChild(frame);
     } else if (section.type === 'widgets' && section.widgets && section.widgets.length > 0) {
       const frame = document.createElement('div');
       frame.className = 'ui-viz__section-frame';
@@ -133,7 +124,7 @@ function renderSectionsList(sections, listClass) {
       frame.appendChild(subList);
       li.appendChild(frame);
     } else if (section.type === 'text-content') {
-      li.textContent = `Text content: ${section.name}`;
+      li.textContent = section.name;
     }
     list.appendChild(li);
   });
@@ -148,7 +139,7 @@ function renderUIStructure(data) {
   }
 
   container.innerHTML = '';
-  const { product, prototype } = data;
+  const { current, target } = data;
 
   const table = document.createElement('table');
   table.className = 'ui-viz__table';
@@ -157,12 +148,12 @@ function renderUIStructure(data) {
   const headerTr = document.createElement('tr');
   const thRoute = document.createElement('th');
   thRoute.textContent = 'Route';
-  const thActual = document.createElement('th');
-  thActual.textContent = 'Actual';
+  const thCurrent = document.createElement('th');
+  thCurrent.textContent = 'Current';
   const thTarget = document.createElement('th');
   thTarget.textContent = 'Target';
   headerTr.appendChild(thRoute);
-  headerTr.appendChild(thActual);
+  headerTr.appendChild(thCurrent);
   headerTr.appendChild(thTarget);
   thead.appendChild(headerTr);
   table.appendChild(thead);
@@ -170,17 +161,17 @@ function renderUIStructure(data) {
   const tbody = document.createElement('tbody');
 
   const routeKeys = new Set([
-    ...product.map((r) => r.route),
-    ...prototype.map((r) => r.route),
+    ...current.map((r) => r.id),
+    ...target.map((r) => r.id),
   ]);
-  const productByRoute = new Map(product.map((r) => [r.route, r]));
-  const prototypeByRoute = new Map(prototype.map((r) => [r.route, r]));
+  const currentById = new Map(current.map((r) => [r.id, r]));
+  const targetById = new Map(target.map((r) => [r.id, r]));
 
-  routeKeys.forEach((routePath) => {
-    const productRoute = productByRoute.get(routePath);
-    const prototypeRoute = prototypeByRoute.get(routePath);
-    const route = prototypeRoute ?? productRoute;
-    const title = route?.title ?? routePath;
+  routeKeys.forEach((routeId) => {
+    const currentRoute = currentById.get(routeId);
+    const targetRoute = targetById.get(routeId);
+    const route = targetRoute ?? currentRoute;
+    const title = route?.title ?? routeId;
 
     const tr = document.createElement('tr');
 
@@ -191,35 +182,35 @@ function renderUIStructure(data) {
     tdPage.appendChild(titleEl);
     tr.appendChild(tdPage);
 
-    const tdProduct = document.createElement('td');
-    const productPath = document.createElement('span');
-    productPath.className = 'ui-viz__route-path';
-    productPath.textContent = productRoute?.route ?? '—';
-    tdProduct.appendChild(productPath);
-    if (productRoute?.sections?.length) {
-      tdProduct.appendChild(renderSectionsList(productRoute.sections));
+    const tdCurrent = document.createElement('td');
+    const currentPath = document.createElement('span');
+    currentPath.className = 'ui-viz__route-path';
+    currentPath.textContent = currentRoute?.route ?? '—';
+    tdCurrent.appendChild(currentPath);
+    if (currentRoute?.sections?.length) {
+      tdCurrent.appendChild(renderSectionsList(currentRoute.sections));
     } else {
       const empty = document.createElement('p');
       empty.className = 'ui-viz__empty';
       empty.textContent = '—';
-      tdProduct.appendChild(empty);
+      tdCurrent.appendChild(empty);
     }
-    tr.appendChild(tdProduct);
+    tr.appendChild(tdCurrent);
 
-    const tdPrototype = document.createElement('td');
-    const prototypePath = document.createElement('span');
-    prototypePath.className = 'ui-viz__route-path';
-    prototypePath.textContent = prototypeRoute?.route ?? '—';
-    tdPrototype.appendChild(prototypePath);
-    if (prototypeRoute?.sections?.length) {
-      tdPrototype.appendChild(renderSectionsList(prototypeRoute.sections));
+    const tdTarget = document.createElement('td');
+    const targetPath = document.createElement('span');
+    targetPath.className = 'ui-viz__route-path';
+    targetPath.textContent = targetRoute?.route ?? '—';
+    tdTarget.appendChild(targetPath);
+    if (targetRoute?.sections?.length) {
+      tdTarget.appendChild(renderSectionsList(targetRoute.sections));
     } else {
       const empty = document.createElement('p');
       empty.className = 'ui-viz__empty';
       empty.textContent = '—';
-      tdPrototype.appendChild(empty);
+      tdTarget.appendChild(empty);
     }
-    tr.appendChild(tdPrototype);
+    tr.appendChild(tdTarget);
 
     tbody.appendChild(tr);
   });
