@@ -1,6 +1,14 @@
 (function () {
   "use strict";
 
+  var charts = {
+    creditBalance: null,
+    usageByModel: null,
+    requestStatus: null,
+  };
+
+  var fullData = null;
+
   function formatChartLabel(isoString) {
     var d = new Date(isoString);
     return d.getMonth() + 1 + "/" + d.getDate();
@@ -13,14 +21,16 @@
   function rgbToRgba(rgbStr, alpha) {
     var match = rgbStr.match(/(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
     if (!match) return rgbStr;
-    return "rgba(" + match[1] + ", " + match[2] + ", " + match[3] + ", " + alpha + ")";
+    return (
+      "rgba(" + match[1] + ", " + match[2] + ", " + match[3] + ", " + alpha + ")"
+    );
   }
 
   function readThemeColors() {
     var style = getComputedStyle(document.body);
-    var textColor = cssVar(style, "--m__text-color") || "#666";
+    var textColor = cssVar(style, "--m__text-color");
     return {
-      text: cssVar(style, "--m__text-caption-color") || "#999",
+      text: cssVar(style, "--m__text-caption-color"),
       grid: "color-mix(in srgb, " + textColor + " 12%, transparent)",
       chartDefault: cssVar(style, "--m__chart-default-color"),
       modelColors: [
@@ -58,26 +68,77 @@
     };
   }
 
-  function renderCreditBalanceChart(creditHistory) {
+  function periodCutoff(days) {
+    var now = new Date();
+    return new Date(now.getTime() - days * 24 * 60 * 60 * 1000).toISOString();
+  }
+
+  function filterByPeriod(dataPoints, days) {
+    if (!days) return dataPoints;
+    var cutoff = periodCutoff(days);
+    return dataPoints.filter(function (dp) {
+      return dp.period >= cutoff;
+    });
+  }
+
+  function creditHistoryForPeriod(creditHistory, days) {
+    if (!creditHistory) return null;
+    var allPoints = creditHistory.data_points;
+    if (!days) {
+      return {
+        starting_balance: creditHistory.starting_balance,
+        data_points: allPoints,
+      };
+    }
+    var cutoff = periodCutoff(days);
+    var priorSum = 0;
+    var filtered = [];
+    for (var i = 0; i < allPoints.length; i++) {
+      if (allPoints[i].period < cutoff) {
+        priorSum += allPoints[i].net_delta;
+      } else {
+        filtered.push(allPoints[i]);
+      }
+    }
+    return {
+      starting_balance: creditHistory.starting_balance + priorSum,
+      data_points: filtered,
+    };
+  }
+
+  function daysFromToggle(chartName) {
+    var toggle = document.querySelector(
+      '.m__segmented-control[data-chart="' + chartName + '"]'
+    );
+    if (!toggle) return 7;
+    var checked = toggle.querySelector("input:checked");
+    return checked && checked.value === "30d" ? 30 : 7;
+  }
+
+  // --- Credit Balance ---
+
+  function renderCreditBalanceChart() {
+    if (charts.creditBalance) charts.creditBalance.destroy();
     var canvas = document.getElementById("credit-balance-chart");
-    if (!canvas) return;
-    if (
-      !creditHistory ||
-      !creditHistory.data_points ||
-      !creditHistory.data_points.length
-    ) {
+    if (!canvas || !fullData) return;
+
+    var days = daysFromToggle("credit-balance");
+    var history = creditHistoryForPeriod(fullData.creditHistory, days);
+    if (!history || !history.data_points || !history.data_points.length) {
       canvas.parentNode.querySelector(".chart-empty").hidden = false;
       canvas.hidden = true;
       return;
     }
+    canvas.parentNode.querySelector(".chart-empty").hidden = true;
+    canvas.hidden = false;
 
-    var sorted = creditHistory.data_points.slice().sort(function (a, b) {
+    var sorted = history.data_points.slice().sort(function (a, b) {
       return a.period < b.period ? -1 : a.period > b.period ? 1 : 0;
     });
 
     var labels = [];
     var values = [];
-    var running = creditHistory.starting_balance;
+    var running = history.starting_balance;
     for (var i = 0; i < sorted.length; i++) {
       running += sorted[i].net_delta;
       labels.push(formatChartLabel(sorted[i].period));
@@ -85,9 +146,9 @@
     }
 
     var theme = readThemeColors();
-    var baseRgb = theme.chartDefault || "rgb(20, 20, 50)";
+    var baseRgb = theme.chartDefault;
 
-    new Chart(canvas, {
+    charts.creditBalance = new Chart(canvas, {
       type: "line",
       data: {
         labels: labels,
@@ -101,7 +162,10 @@
               var area = context.chart.chartArea;
               if (!area) return solid;
               var grad = context.chart.ctx.createLinearGradient(
-                0, area.top, 0, area.bottom
+                0,
+                area.top,
+                0,
+                area.bottom
               );
               grad.addColorStop(0, solid);
               grad.addColorStop(0.67, solid);
@@ -116,24 +180,10 @@
       },
       options: {
         responsive: true,
+        animation: false,
         plugins: {
           tooltip: { enabled: false },
-          legend: {
-            position: "bottom",
-            labels: {
-              color: theme.text,
-              usePointStyle: true,
-              pointStyle: "circle",
-              boxWidth: 8,
-              boxHeight: 8,
-              generateLabels: function (chart) {
-                var list =
-                  Chart.defaults.plugins.legend.labels.generateLabels(chart);
-                list[0].fillStyle = rgbToRgba(baseRgb, 0.35);
-                return list;
-              },
-            },
-          },
+          legend: { display: false },
         },
         scales: {
           x: baseScaleOptions(theme),
@@ -143,14 +193,25 @@
     });
   }
 
-  function renderUsageByModelChart(dataPoints) {
+  // --- Usage by Model ---
+
+  function renderUsageByModelChart() {
+    if (charts.usageByModel) charts.usageByModel.destroy();
     var canvas = document.getElementById("usage-by-model-chart");
-    if (!canvas) return;
-    if (!dataPoints || !dataPoints.length) {
+    if (!canvas || !fullData) return;
+
+    var days = daysFromToggle("usage-by-model");
+    var dataPoints = filterByPeriod(
+      fullData.usageStats ? fullData.usageStats.data_points : [],
+      days
+    );
+    if (!dataPoints.length) {
       canvas.parentNode.querySelector(".chart-empty").hidden = false;
       canvas.hidden = true;
       return;
     }
+    canvas.parentNode.querySelector(".chart-empty").hidden = true;
+    canvas.hidden = false;
 
     var periodMap = new Map();
     var models = new Set();
@@ -159,7 +220,9 @@
       models.add(dp.model_identifier);
       if (!periodMap.has(dp.period)) periodMap.set(dp.period, new Map());
       var existing = periodMap.get(dp.period).get(dp.model_identifier) || 0;
-      periodMap.get(dp.period).set(dp.model_identifier, existing + dp.total_requests);
+      periodMap
+        .get(dp.period)
+        .set(dp.model_identifier, existing + dp.total_requests);
     }
 
     var sortedPeriods = Array.from(periodMap.keys()).sort();
@@ -177,11 +240,12 @@
       };
     });
 
-    new Chart(canvas, {
+    charts.usageByModel = new Chart(canvas, {
       type: "bar",
       data: { labels: labels, datasets: datasets },
       options: {
         responsive: true,
+        animation: false,
         categoryPercentage: 1,
         barPercentage: 0.92,
         plugins: basePlugins(theme),
@@ -196,14 +260,25 @@
     });
   }
 
-  function renderRequestStatusChart(dataPoints) {
+  // --- Requests by Status ---
+
+  function renderRequestStatusChart() {
+    if (charts.requestStatus) charts.requestStatus.destroy();
     var canvas = document.getElementById("request-status-chart");
-    if (!canvas) return;
-    if (!dataPoints || !dataPoints.length) {
+    if (!canvas || !fullData) return;
+
+    var days = daysFromToggle("request-status");
+    var dataPoints = filterByPeriod(
+      fullData.usageStats ? fullData.usageStats.data_points : [],
+      days
+    );
+    if (!dataPoints.length) {
       canvas.parentNode.querySelector(".chart-empty").hidden = false;
       canvas.hidden = true;
       return;
     }
+    canvas.parentNode.querySelector(".chart-empty").hidden = true;
+    canvas.hidden = false;
 
     var periodMap = new Map();
     for (var i = 0; i < dataPoints.length; i++) {
@@ -226,7 +301,7 @@
     var labels = sortedPeriods.map(formatChartLabel);
 
     var theme = readThemeColors();
-    new Chart(canvas, {
+    charts.requestStatus = new Chart(canvas, {
       type: "bar",
       data: {
         labels: labels,
@@ -263,6 +338,7 @@
       },
       options: {
         responsive: true,
+        animation: false,
         categoryPercentage: 1,
         barPercentage: 0.92,
         plugins: basePlugins(theme),
@@ -277,20 +353,54 @@
     });
   }
 
-  fetch("/dashboard-charts-7d.json")
+  // --- Toggle wiring ---
+
+  var renderMap = {
+    "credit-balance": renderCreditBalanceChart,
+    "usage-by-model": renderUsageByModelChart,
+    "request-status": renderRequestStatusChart,
+  };
+
+  function wireToggles() {
+    var toggles = document.querySelectorAll(".m__segmented-control");
+    for (var i = 0; i < toggles.length; i++) {
+      (function (toggle) {
+        var chartName = toggle.getAttribute("data-chart");
+        var render = renderMap[chartName];
+        if (!render) return;
+        toggle.addEventListener("change", function () {
+          render();
+        });
+      })(toggles[i]);
+    }
+  }
+
+  // --- Init ---
+
+  function renderAll() {
+    if (!fullData) return;
+    renderCreditBalanceChart();
+    renderUsageByModelChart();
+    renderRequestStatusChart();
+  }
+
+  new MutationObserver(function (mutations) {
+    for (var i = 0; i < mutations.length; i++) {
+      if (mutations[i].attributeName === "class") {
+        renderAll();
+        return;
+      }
+    }
+  }).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+
+  fetch("/dashboard-charts.json")
     .then(function (res) {
       return res.json();
     })
     .then(function (data) {
-      var usagePoints =
-        data.usageStats && data.usageStats.data_points
-          ? data.usageStats.data_points
-          : [];
-      var creditHistory = data.creditHistory || null;
-
-      renderCreditBalanceChart(creditHistory);
-      renderUsageByModelChart(usagePoints);
-      renderRequestStatusChart(usagePoints);
+      fullData = data;
+      renderAll();
+      wireToggles();
     })
     .catch(function (err) {
       console.error("Failed to load dashboard chart data:", err);
