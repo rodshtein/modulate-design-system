@@ -116,3 +116,15 @@ Label + input pair. Label sits above the input. Input uses `--m__ui-control-colo
 **UI structure:** `ui.yaml` (routes `/auth/login/`, `/auth/signup/`, `/auth/reset-password/`).
 
 Three auth screens using `.auth-form` + `.m__textfield` + `.m__button`. Sign in has email and password fields. Create account has email only, button "Continue". Reset password has email only, button "Send reset link".
+
+---
+
+## Dashboard charts
+
+**Script:** `src/assets/js/dashboard-charts.js`  
+**Data:** `dashboard-charts.json` (static snapshot with 30 days of data, passthrough-copied to site root).  
+**Includes:** `src/includes/dashboard/overview/credit-balance-over-time.html`, `usage-by-model.html`, `requests-by-status.html`.  
+**Styles:** `.chart-container`, `.chart-empty`, `.m__segmented-control` in `src/styles/dashboard/layout.css`.  
+**Library:** Chart.js 4.4.0 via CDN, loaded conditionally with `chartJs: true` in page front matter.
+
+Three charts on the dashboard overview page: Credit Balance Over Time (line), Usage by Model (stacked bar), Requests by Status (stacked bar). Each chart has a "Last 7 days / 1 month" radio toggle that filters data client-side. The script fetches the full JSON data file at runtime, filters by selected period, and renders Chart.js canvases. Chart instances are stored and destroyed on re-render. Theme-aware: reads CSS custom properties for grid and label colors.

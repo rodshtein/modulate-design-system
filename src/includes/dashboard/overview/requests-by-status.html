@@ -2,9 +2,17 @@
   class="dashboard-section m__widget"
   data-component="requests-by-status">
   <h2>Requests by status</h2>
-  <p class="dashboard-section__caption">Last 7 days</p>
-  <p>
-    Statuses: Success, Client Error, Server Error, Processing. No requests
-    recorded for this period.
-  </p>
+  <fieldset class="m__segmented-control" data-chart="request-status">
+    <label
+      ><input type="radio" name="status-period" value="7d" checked />Last 7
+      days</label
+    >
+    <label
+      ><input type="radio" name="status-period" value="30d" />1 month</label
+    >
+  </fieldset>
+  <div class="chart-container">
+    <canvas id="request-status-chart"></canvas>
+    <p class="chart-empty" hidden>No requests recorded for this period.</p>
+  </div>
 </section>

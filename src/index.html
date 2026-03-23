@@ -32,6 +32,10 @@ block content %}
   <div class="m__wrapper">
     <div class="m__space S"></div>
 
+    <h3>Charts Color Palette</h3>
+    {% include 'components/chart-color-palette.html' %}
+    <div class="m__space S"></div>
+
     <h3>Emotion Color Palette</h3>
     {% include 'components/emotion-color-palette.html' %}
     <div class="m__space S"></div>
@@ -409,6 +413,31 @@ block content %}
             <code>--m__ui-control-color</code><br />
             <code>--m__ui-border-color</code><br />
             <code>--m__text-color</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>.m__segmented-control</code></td>
+          <td>
+            <fieldset class="m__segmented-control">
+              <label
+                ><input
+                  type="radio"
+                  name="docs-period"
+                  value="7d"
+                  checked />Last 7 days</label
+              >
+              <label
+                ><input type="radio" name="docs-period" value="30d" />1
+                month</label
+              >
+            </fieldset>
+          </td>
+          <td>
+            <code>--m__segmented-control-padding</code><br />
+            <code>--m__radius-s</code><br />
+            <code>--m__text-color</code><br />
+            <code>--m__text-hover-color</code><br />
+            <code>--m__text-link-color</code>
           </td>
         </tr>
       </tbody>
